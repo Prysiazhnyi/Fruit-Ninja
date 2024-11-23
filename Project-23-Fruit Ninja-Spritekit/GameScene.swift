@@ -56,10 +56,10 @@ class GameScene: SKScene {
         background.blendMode = .replace
         background.zPosition = -1
         addChild(background)
-        
+
         physicsWorld.gravity = CGVector(dx: 0, dy: -6)
         physicsWorld.speed = 0.85
-        
+
         createScore()
         createLives()
         createSlices()
@@ -251,8 +251,6 @@ class GameScene: SKScene {
         if isGameOver {
             let hitNodes = nodes(at: location).filter { $0.name == "startNewGameButton" }
             
-            print("Тач startNewGameButton --  \(hitNodes)")
-            
             if let _ = hitNodes.first {
                 // Перезапускаем игру, если нажата кнопка
                 restartGame()
@@ -262,27 +260,16 @@ class GameScene: SKScene {
                 }
             }
         }
-        
-        // 1
         activeSlicePoints.removeAll(keepingCapacity: true)
-        
-        // 2
         // let location = touch.location(in: self)
         activeSlicePoints.append(location)
-        
-        // 3
         redrawActiveSlice()
-        
-        // 4
+
         activeSliceBG.removeAllActions()
         activeSliceFG.removeAllActions()
-        
-        // 5
+
         activeSliceBG.alpha = 1
         activeSliceFG.alpha = 1
-        
-        
-        
     }
     
     func redrawActiveSlice() {
@@ -407,7 +394,7 @@ class GameScene: SKScene {
                 if node.position.y < -140 {
                     node.removeAllActions()
                     
-                    if node.name == "enemy" {
+                    if node.name == "enemy" || node.name == "monkey" {
                         node.name = ""
                         subtractLife()
                         
