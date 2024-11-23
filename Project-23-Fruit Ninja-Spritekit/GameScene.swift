@@ -49,7 +49,7 @@ class GameScene: SKScene {
     
     override func didMove(to view: SKView) {
         
-        playBackgroundMusic(named: "backgroundMusic.mp3")
+        //playBackgroundMusic(named: "missija_nevipolnima_backgroundMusic.mp3")
         
         let background = SKSpriteNode(imageNamed: "sliceBackground")
         background.position = CGPoint(x: 512, y: 384)
