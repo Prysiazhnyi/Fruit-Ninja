@@ -133,7 +133,7 @@ class GameScene: SKScene {
         let nodesAtPoint = nodes(at: location)
         
         for case let node as SKSpriteNode in nodesAtPoint {
-            if node.name == "enemy" {
+            if node.name == "enemy"{
                 // destroy penguin
                 // 1
                 if let emitter = SKEmitterNode(fileNamed: "sliceHitEnemy") {
@@ -192,9 +192,33 @@ class GameScene: SKScene {
                 
                 run(SKAction.playSoundFileNamed("explosion.caf", waitForCompletion: false))
                 endGame(triggeredByBomb: true)
+            } else if node.name == "monkey" {
+                
+                // destroy monkey
+                if let emitter = SKEmitterNode(fileNamed: "sliceHitEnemy") {
+                    emitter.position = node.position
+                    addChild(emitter)
+                }
+                
+                node.name = ""
+                
+                node.physicsBody?.isDynamic = false
+                
+                let scaleOut = SKAction.scale(to: 0.001, duration:0.2)
+                let fadeOut = SKAction.fadeOut(withDuration: 0.2)
+                let group = SKAction.group([scaleOut, fadeOut])
+                
+                let seq = SKAction.sequence([group, .removeFromParent()])
+                node.run(seq)
+                
+                score += 3
+                
+                if let index = activeEnemies.firstIndex(of: node) {
+                    activeEnemies.remove(at: index)
+                }
+                run(SKAction.playSoundFileNamed("whack.caf", waitForCompletion: false))
             }
         }
-        
     }
     
     func playSwooshSound() {
@@ -300,17 +324,15 @@ class GameScene: SKScene {
         
         if enemyType == 0 {
             
-            // 1
+            // Создание бомбы
             enemy = SKSpriteNode()
             enemy.zPosition = 1
             enemy.name = "bombContainer"
             
-            // 2
             let bombImage = SKSpriteNode(imageNamed: "sliceBomb")
             bombImage.name = "bomb"
             enemy.addChild(bombImage)
             
-            // 3
             if bombSoundEffect != nil {
                 bombSoundEffect?.stop()
                 bombSoundEffect = nil
@@ -330,10 +352,18 @@ class GameScene: SKScene {
                 enemy.addChild(emitter)
             }
             
-        } else {
+        } else if enemyType == 1 {
+            // Обычный пингвин
             enemy = SKSpriteNode(imageNamed: "penguin")
             run(SKAction.playSoundFileNamed("launch.caf", waitForCompletion: false))
             enemy.name = "enemy"
+            print("penguin - создан")
+        } else {
+            // создание нового врага monkey
+            enemy = SKSpriteNode(imageNamed: "monkey")
+            run(SKAction.playSoundFileNamed("monkey.m4r", waitForCompletion: false))
+            enemy.name = "monkey"
+            print("monkey - создан")
         }
         
         // 1
@@ -386,7 +416,7 @@ class GameScene: SKScene {
                         if index < activeEnemies.count {
                             activeEnemies.remove(at: index)
                         }
-
+                        
                     } else if node.name == "bombContainer" {
                         node.name = ""
                         node.removeFromParent()
