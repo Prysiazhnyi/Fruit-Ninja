@@ -51,16 +51,23 @@ class GameScene: SKScene {
         
         //playBackgroundMusic(named: "missija_nevipolnima_backgroundMusic.mp3")
         
+        let screenWidth = self.size.width
+        let screenHeight = self.size.height
+        // Инициализация gameScore в didMove
+           createScore()
         let background = SKSpriteNode(imageNamed: "sliceBackground")
-        background.position = CGPoint(x: 512, y: 384)
+        background.position = CGPoint(x: screenWidth / 2, y: screenHeight / 2)
         background.blendMode = .replace
         background.zPosition = -1
         addChild(background)
 
+        gameScore.position = CGPoint(x: screenWidth * 0.02, y: screenHeight * 0.02) // 2% от ширины и высоты экрана
+
+
         physicsWorld.gravity = CGVector(dx: 0, dy: -6)
         physicsWorld.speed = 0.85
 
-        createScore()
+        //createScore()
         createLives()
         createSlices()
         
@@ -523,7 +530,7 @@ class GameScene: SKScene {
         if isGameEnded {
             return
         }
-        
+        audioPlayer?.stop()
         isGameEnded = true
         physicsWorld.speed = 0
         //isUserInteractionEnabled = false
